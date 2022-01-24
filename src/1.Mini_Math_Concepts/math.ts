@@ -46,7 +46,7 @@ function map(
  * @param max max for value
  * @returns if value > max return value will be max if value < min return value will be min otherwise return value
  */
-function clamp(value: number, min: number, max: number) {
+function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
@@ -59,10 +59,30 @@ function clamp(value: number, min: number, max: number) {
 function distance(
   point1: { x: number; y: number },
   point2: { x: number; y: number }
-) {
+): number {
   const dx = point2.x - point1.x;
   const dy = point2.y - point1.y;
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-export { norm, lerp, map, clamp, distance };
+/**
+ * Generate random number btw given range
+ * @param min min value of range (inclusive)
+ * @param max max value of range (exclusive)
+ * @returns random number (float) btw min and max
+ */
+function rand(min: number, max: number): number {
+  return min + Math.random() * (max - min);
+}
+
+/**
+ * Generate random number btw given range
+ * @param min min value of range (inclusive)
+ * @param max max value of range (inclusive)
+ * @returns random number (int) btw min and max
+ */
+function randInt(min: number, max: number): number {
+  return Math.floor(min + Math.random() * (max - min + 1));
+}
+
+export { norm, lerp, map, clamp, distance, rand, randInt };
