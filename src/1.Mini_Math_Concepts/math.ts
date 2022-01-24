@@ -39,4 +39,15 @@ function map(
   return lerp(norm(value, sourceMin, sourceMax), destMin, destMax);
 }
 
-export { norm, lerp, map };
+/**
+ * Clamp given value btw min and max.
+ * @param value Any value
+ * @param min min for value
+ * @param max max for value
+ * @returns if value > max return value will be max if value < min return value will be min otherwise return value
+ */
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
+export { norm, lerp, map, clamp };
