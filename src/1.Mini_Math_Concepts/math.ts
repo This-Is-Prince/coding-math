@@ -85,6 +85,14 @@ function randInt(min: number, max: number): number {
   return Math.floor(min + Math.random() * (max - min + 1));
 }
 
+function randDist(min: number, max: number, iterations: number) {
+  let total = 0;
+  for (let i = 0; i < iterations; i += 1) {
+    total += rand(min, max);
+  }
+  return total / iterations;
+}
+
 /**
  * Convert given degrees into radians
  * @param degrees given degrees
@@ -132,6 +140,7 @@ export {
   distance,
   rand,
   randInt,
+  randDist,
   degreesToRads,
   radsToDegrees,
   roundToPlaces,
