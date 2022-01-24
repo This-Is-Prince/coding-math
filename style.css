@@ -3,6 +3,7 @@
 *::after {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 body {
   width: 100vw;
@@ -10,6 +11,7 @@ body {
   color: aqua;
   font-family: Arial, Helvetica, sans-serif;
   counter-reset: section;
+  overflow-x: hidden;
 }
 ul {
   list-style: none;

@@ -85,11 +85,43 @@ function randInt(min: number, max: number): number {
   return Math.floor(min + Math.random() * (max - min + 1));
 }
 
-function degreesToRads(degrees: number) {
+/**
+ * Convert given degrees into radians
+ * @param degrees given degrees
+ * @returns value in radians
+ */
+function degreesToRads(degrees: number): number {
   return (degrees / 180) * Math.PI;
 }
-function radsToDegrees(radians: number) {
+
+/**
+ * Convert given radian into degrees
+ * @param radians given radians
+ * @returns value in degrees
+ */
+function radsToDegrees(radians: number): number {
   return (radians * 180) / Math.PI;
+}
+
+/**
+ * Round given value at given places
+ * @param value any value which you want to round
+ * @param places at which decimal places you want to round given value
+ * @returns rounded value at given places
+ */
+function roundToPlaces(value: number, places: number): number {
+  const mult = Math.pow(10, places);
+  return Math.round(value * mult) / mult;
+}
+
+/**
+ * Round given value to nearest integer
+ * @param value any given value
+ * @param nearest nearest factor
+ * @returns rounded value nearest to given value
+ */
+function roundNearest(value: number, nearest: number): number {
+  return Math.round(value / nearest) * nearest;
 }
 
 export {
@@ -102,4 +134,6 @@ export {
   randInt,
   degreesToRads,
   radsToDegrees,
+  roundToPlaces,
+  roundNearest,
 };
