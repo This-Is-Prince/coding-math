@@ -50,4 +50,19 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
-export { norm, lerp, map, clamp };
+/**
+ * Calculate distance between two points
+ * @param point1 first point
+ * @param point2 second point
+ * @returns distance between two points.
+ */
+function distance(
+  point1: { x: number; y: number },
+  point2: { x: number; y: number }
+) {
+  const dx = point2.x - point1.x;
+  const dy = point2.y - point1.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+export { norm, lerp, map, clamp, distance };
