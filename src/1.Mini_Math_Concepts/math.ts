@@ -85,4 +85,21 @@ function randInt(min: number, max: number): number {
   return Math.floor(min + Math.random() * (max - min + 1));
 }
 
-export { norm, lerp, map, clamp, distance, rand, randInt };
+function degreesToRads(degrees: number) {
+  return (degrees / 180) * Math.PI;
+}
+function radsToDegrees(radians: number) {
+  return (radians * 180) / Math.PI;
+}
+
+export {
+  norm,
+  lerp,
+  map,
+  clamp,
+  distance,
+  rand,
+  randInt,
+  degreesToRads,
+  radsToDegrees,
+};
