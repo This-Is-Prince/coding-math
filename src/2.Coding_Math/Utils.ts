@@ -1,9 +1,12 @@
+type Callback = (ctx: Canvas2DContext) => void;
+
 interface Canvas2DContext extends CanvasRenderingContext2D {
   // Setters
   setCanvasBackgroundColor: (color: string) => Canvas2DContext;
   setCanvasSize: (width: number, height: number) => Canvas2DContext;
   // Methods
   clearCanvas: () => Canvas2DContext;
+  draw: (fn: Callback) => Canvas2DContext;
 }
 
 class Utils {
@@ -34,7 +37,7 @@ class Utils {
    */
   static get2DContext(canvas: HTMLCanvasElement): Canvas2DContext {
     if (!(canvas instanceof HTMLCanvasElement)) {
-      console.error(`${canvas} is not HTMLCanvasElement`);
+      throw new Error(`${canvas} is not HTMLCanvasElement`);
     }
     const ctx = canvas.getContext("2d") as Canvas2DContext;
 
@@ -76,8 +79,13 @@ class Utils {
       return this;
     };
 
+    ctx.draw = function (fn) {
+      fn(this);
+      return this;
+    };
+
     return ctx;
   }
 }
 
-export { Utils, Canvas2DContext };
+export { Utils, Canvas2DContext, Callback };

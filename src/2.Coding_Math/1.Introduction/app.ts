@@ -1,4 +1,4 @@
-import { Utils } from "../Utils";
+import { Callback, Utils } from "../Utils";
 
 window.addEventListener("load", () => {
   // canvas
@@ -11,5 +11,23 @@ window.addEventListener("load", () => {
 
   window.addEventListener("resize", () => {
     ctx.setCanvasSize(window.innerWidth - 50, window.innerHeight - 50);
+    ctx.draw(fn);
   });
+
+  const fn: Callback = (ctx) => {
+    ctx.clearCanvas();
+    for (let i = 0; i < 100; i += 1) {
+      ctx.beginPath();
+      ctx.moveTo(
+        Math.random() * ctx.canvas.width,
+        Math.random() * ctx.canvas.height
+      );
+      ctx.lineTo(
+        Math.random() * ctx.canvas.width,
+        Math.random() * ctx.canvas.height
+      );
+      ctx.stroke();
+    }
+  };
+  ctx.draw(fn);
 });
