@@ -1,12 +1,9 @@
-type Callback = (ctx: Canvas2DContext) => void;
-
 interface Canvas2DContext extends CanvasRenderingContext2D {
   // Setters
   setCanvasBackgroundColor: (color: string) => Canvas2DContext;
   setCanvasSize: (width: number, height: number) => Canvas2DContext;
   // Methods
   clearCanvas: () => Canvas2DContext;
-  draw: (fn: Callback) => Canvas2DContext;
 }
 
 class Utils {
@@ -79,13 +76,8 @@ class Utils {
       return this;
     };
 
-    ctx.draw = function (fn) {
-      fn(this);
-      return this;
-    };
-
     return ctx;
   }
 }
 
-export { Utils, Canvas2DContext, Callback };
+export { Utils, Canvas2DContext };
