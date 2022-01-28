@@ -12,6 +12,11 @@ class RectFill extends Rect {
     super(x, y, width, height);
     this.fillColor = fillColor || "black";
   }
+  drawAt(ctx: CanvasRenderingContext2D, x: number, y: number) {
+    this.position.x = x;
+    this.position.y = y;
+    this.draw(ctx);
+  }
   draw(ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = this.fillColor;
     ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
