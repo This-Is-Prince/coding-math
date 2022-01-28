@@ -1,3 +1,5 @@
+import { Point2D } from "../Point2D";
+import { Line } from "../Shapes/Lines/Line";
 import { Utils } from "../Utils";
 
 window.addEventListener("load", () => {
@@ -14,19 +16,25 @@ window.addEventListener("load", () => {
     draw();
   });
 
+  const line = new Line();
   function draw() {
     ctx.clearCanvas();
     for (let i = 0; i < 100; i += 1) {
-      ctx.beginPath();
-      ctx.moveTo(
-        Math.random() * ctx.canvas.width,
-        Math.random() * ctx.canvas.height
-      );
-      ctx.lineTo(
-        Math.random() * ctx.canvas.width,
-        Math.random() * ctx.canvas.height
-      );
-      ctx.stroke();
+      line
+        .startFrom(
+          ctx,
+          new Point2D(
+            Math.random() * ctx.canvas.width,
+            Math.random() * ctx.canvas.height
+          )
+        )
+        .to(
+          new Point2D(
+            Math.random() * ctx.canvas.width,
+            Math.random() * ctx.canvas.height
+          )
+        )
+        .draw();
     }
   }
   draw();
