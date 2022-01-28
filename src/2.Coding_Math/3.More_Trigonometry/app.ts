@@ -1,4 +1,7 @@
-import { Canvas2DContext, Utils } from "../Utils";
+import { MathUtils } from "../Math";
+import { Point2D } from "../Point2D";
+import { CircleFill } from "../Shapes/Circles/CircleFill";
+import { Utils } from "../Utils";
 
 window.addEventListener("load", () => {
   // canvas
@@ -12,49 +15,69 @@ window.addEventListener("load", () => {
   window.addEventListener("resize", () => {
     ctx.setCanvasSize(window.innerWidth - 50, window.innerHeight - 50);
   });
-  const ball1 = new Ball(50, ctx.canvas.width / 2, ctx.canvas.height / 2);
-  const animation = new Animation(ball1);
+  const ball = new CircleFill(ctx.canvas.width / 2, ctx.canvas.height / 2, 50);
+  const tween = new Tween()
+    .from(new Point2D(ctx.canvas.width / 2, 50))
+    .to(new Point2D(ctx.canvas.width / 2, ctx.canvas.height - 50))
+    .inTime(10);
 
   // First
   function draw() {
     ctx.clearCanvas();
-    animation.animate(ctx.canvas.width, ctx.canvas.height);
-    ball1.render(ctx);
+    tween.update(ball);
+    ball.draw(ctx);
 
     window.requestAnimationFrame(draw);
   }
   draw();
 });
 
-class Animation {
-  public ball!: Ball;
-  public angle!: number;
-  public speed!: number;
-  constructor(ball: Ball, angle?: number, speed?: number) {
-    this.angle = angle || 0;
-    this.speed = speed || 0.1;
-    this.ball = ball;
-  }
-  animate(width: number, height: number) {
-    const offset = height * 0.5 - this.ball.radius;
-    this.ball.x = width * 0.5;
-    this.ball.y = height * 0.5 + Math.sin(this.angle) * offset;
-    this.angle += this.speed;
-  }
-}
+class Tween {
+  private angle!: number;
+  private startPoint!: Point2D;
+  private endPoint!: Point2D;
+  private time!: number;
+  public prevTime!: number;
 
-class Ball {
-  public radius!: number;
-  public x!: number;
-  public y!: number;
-  constructor(radius?: number, x?: number, y?: number) {
-    this.radius = radius || 25;
-    this.x = x || 50;
-    this.y = y || 50;
+  constructor() {
+    this.angle = 0;
+    this.time = 0;
+    this.prevTime = 0;
   }
-  render(ctx: Canvas2DContext) {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    ctx.fill();
+
+  from(p: Point2D) {
+    this.startPoint = p;
+    return this;
+  }
+
+  to(p: Point2D) {
+    this.endPoint = p;
+    return this;
+  }
+
+  inTime(time: number) {
+    if (time < 0) {
+      console.error(`time can't be negative...`);
+      this.time = 0;
+    } else {
+      this.time = time;
+    }
+    return this;
+  }
+
+  update(ball: CircleFill) {
+    const currTime = performance.now();
+    const deltaTime = (currTime - this.prevTime) / 1000;
+    this.prevTime = currTime;
+
+    this.angle += ((Math.PI * 0.5) / this.time) * deltaTime;
+    this.angle %= Math.PI * 0.5;
+    const e = this.endPoint;
+    const s = this.startPoint;
+
+    let norm = Math.cos(this.angle);
+    ball.position.x = MathUtils.lerp(norm, s.x, e.x);
+    norm = Math.sin(this.angle);
+    ball.position.y = MathUtils.lerp(norm, s.y, e.y);
   }
 }
