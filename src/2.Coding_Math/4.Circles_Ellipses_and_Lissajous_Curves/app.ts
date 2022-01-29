@@ -1,4 +1,6 @@
-import { Canvas2DContext, Utils } from "../Utils";
+import { MathUtils } from "../Math";
+import { CircleFill } from "../Shapes/Circles/CircleFill";
+import { Utils } from "../Utils";
 
 window.addEventListener("load", () => {
   // canvas
@@ -11,31 +13,103 @@ window.addEventListener("load", () => {
 
   window.addEventListener("resize", () => {
     ctx.setCanvasSize(window.innerWidth - 50, window.innerHeight - 50);
+    createBalls();
   });
-  const balls: { ball: Ball; animation: Animation }[] = [];
-  for (let i = 0; i < 200; i++) {
-    const ball = new Ball(5);
-    const animation = new Animation(
-      ball,
-      { x: Math.random() * Math.PI * 2, y: Math.random() * Math.PI * 4 },
-      { x: Math.random() * 0.1, y: Math.random() * 0.131 },
-      { x: 100, y: 100 }
-    );
-    balls.push({ ball, animation });
-  }
 
+  /**
+   * Circle Animations
+   */
+  /*   let balls: { ball: CircleFill; circleAnimation: CircleAnimation }[] = [];
+  function createBalls() {
+    const totalBalls = 100;
+    const tempBalls: { ball: CircleFill; circleAnimation: CircleAnimation }[] =
+      [];
+    for (let i = 0; i < totalBalls; i++) {
+      const ball = new CircleFill(
+        ctx.canvas.width / 2,
+        ctx.canvas.height / 2,
+        MathUtils.randomInt(5, 10)
+      );
+      const circleAnimation = new CircleAnimation(
+        MathUtils.randomInt(0, ctx.canvas.width),
+        MathUtils.randomInt(0, ctx.canvas.height),
+        MathUtils.randomInt(50, 100),
+        0.075
+        ball
+      );
+      tempBalls.push({ ball, circleAnimation });
+    }
+    balls = tempBalls;
+  }
+  createBalls(); */
+
+  /**
+   * Ellipses Animations
+   */
+  /*   let balls: { ball: CircleFill; ellipsesAnimation: EllipsesAnimation }[] = [];
+  function createBalls() {
+    const totalBalls = 100;
+    const tempBalls: {
+      ball: CircleFill;
+      ellipsesAnimation: EllipsesAnimation;
+    }[] = [];
+    for (let i = 0; i < totalBalls; i++) {
+      const ball = new CircleFill(
+        ctx.canvas.width / 2,
+        ctx.canvas.height / 2,
+        MathUtils.randomInt(5, 10)
+      );
+      const ellipsesAnimation = new EllipsesAnimation(
+        MathUtils.randomInt(0, ctx.canvas.width),
+        MathUtils.randomInt(0, ctx.canvas.height),
+        MathUtils.randomInt(50, 100),
+        MathUtils.randomInt(50, 100),
+        0.1,
+        ball
+      );
+      tempBalls.push({ ball, ellipsesAnimation });
+    }
+    balls = tempBalls;
+  }
+  createBalls(); */
+
+  /**
+   * Lissajous Animations
+   */
+  let balls: { ball: CircleFill; lissajousAnimation: LissajousAnimation }[] =
+    [];
+  function createBalls() {
+    const totalBalls = 100;
+    const tempBalls: {
+      ball: CircleFill;
+      lissajousAnimation: LissajousAnimation;
+    }[] = [];
+    for (let i = 0; i < totalBalls; i++) {
+      const ball = new CircleFill(
+        ctx.canvas.width / 2,
+        ctx.canvas.height / 2,
+        MathUtils.randomInt(5, 10)
+      );
+      const lissajousAnimation = new LissajousAnimation(
+        MathUtils.randomInt(0, ctx.canvas.width),
+        MathUtils.randomInt(0, ctx.canvas.height),
+        MathUtils.randomInt(50, 100),
+        MathUtils.randomInt(50, 100),
+        0.1,
+        0.131,
+        ball
+      );
+      tempBalls.push({ ball, lissajousAnimation });
+    }
+    balls = tempBalls;
+  }
+  createBalls();
   // First
   function draw() {
     ctx.clearCanvas();
-    // animation.animate(ctx.canvas.width, ctx.canvas.height);
-    // ball1.render(ctx);
-    balls.forEach(({ ball, animation }) => {
-      animation.updateRadius({
-        x: ctx.canvas.width / 2,
-        y: ctx.canvas.height / 2,
-      });
-      animation.animate(ctx.canvas.width, ctx.canvas.height);
-      ball.render(ctx);
+    balls.forEach(({ lissajousAnimation, ball }) => {
+      lissajousAnimation.animate();
+      ball.draw(ctx);
     });
 
     window.requestAnimationFrame(draw);
@@ -43,47 +117,105 @@ window.addEventListener("load", () => {
   draw();
 });
 
-class Animation {
-  public ball!: Ball;
-  public angle!: { x: number; y: number };
-  public speed!: { x: number; y: number };
-  public radius!: { x: number; y: number };
+class CircleAnimation {
+  private x!: number;
+  private y!: number;
+  private radius!: number;
+  private ball!: CircleFill;
+  private angle!: number;
+  private speed!: number;
 
   constructor(
-    ball: Ball,
-    angle: { x: number; y: number },
-    speed: { x: number; y: number },
-    radius: { x: number; y: number }
+    x: number,
+    y: number,
+    radius: number,
+    speed: number,
+    ball: CircleFill
   ) {
-    this.angle = angle || { x: 0, y: 0 };
-    this.speed = speed || { x: 0, y: 0 };
-    this.radius = radius || { x: 50, y: 50 };
-
-    this.ball = ball;
-  }
-  updateRadius(radius: { x: number; y: number }) {
+    this.x = x;
+    this.y = y;
     this.radius = radius;
+    this.ball = ball;
+    this.angle = 0;
+    this.speed = speed;
   }
-  animate(width: number, height: number) {
-    this.ball.x = width / 2 + Math.cos(this.angle.x) * this.radius.x;
-    this.ball.y = height / 2 + Math.sin(this.angle.y) * this.radius.y;
-    this.angle.x += this.speed.x;
-    this.angle.y += this.speed.y;
+  public animate() {
+    this.ball.position.x = this.x + Math.cos(this.angle) * this.radius;
+    this.ball.position.y = this.y + Math.sin(this.angle) * this.radius;
+    this.angle += this.speed;
+    this.angle %= Math.PI * 2;
+  }
+}
+class EllipsesAnimation {
+  private x!: number;
+  private y!: number;
+  private xRadius!: number;
+  private yRadius!: number;
+  private ball!: CircleFill;
+  private angle!: number;
+  private speed!: number;
+
+  constructor(
+    x: number,
+    y: number,
+    xRadius: number,
+    yRadius: number,
+    speed: number,
+    ball: CircleFill
+  ) {
+    this.x = x;
+    this.y = y;
+    this.xRadius = xRadius;
+    this.yRadius = yRadius;
+    this.ball = ball;
+    this.angle = 0;
+    this.speed = speed;
+  }
+  public animate() {
+    this.ball.position.x = this.x + Math.cos(this.angle) * this.xRadius;
+    this.ball.position.y = this.y + Math.sin(this.angle) * this.yRadius;
+    this.angle += this.speed;
+    this.angle %= Math.PI * 2;
   }
 }
 
-class Ball {
-  public radius!: number;
-  public x!: number;
-  public y!: number;
-  constructor(radius?: number, x?: number, y?: number) {
-    this.radius = radius || 25;
-    this.x = x || 50;
-    this.y = y || 50;
+class LissajousAnimation {
+  private x!: number;
+  private y!: number;
+  private xRadius!: number;
+  private yRadius!: number;
+  private ball!: CircleFill;
+  private xAngle!: number;
+  private yAngle!: number;
+
+  private xSpeed!: number;
+  private ySpeed!: number;
+
+  constructor(
+    x: number,
+    y: number,
+    xRadius: number,
+    yRadius: number,
+    xSpeed: number,
+    ySpeed: number,
+    ball: CircleFill
+  ) {
+    this.x = x;
+    this.y = y;
+    this.xRadius = xRadius;
+    this.yRadius = yRadius;
+    this.ball = ball;
+    this.xAngle = 0;
+    this.yAngle = 0;
+    this.xSpeed = xSpeed;
+    this.ySpeed = ySpeed;
   }
-  render(ctx: Canvas2DContext) {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    ctx.fill();
+  public animate() {
+    this.ball.position.x = this.x + Math.cos(this.xAngle) * this.xRadius;
+    this.ball.position.y = this.y + Math.sin(this.yAngle) * this.yRadius;
+    this.xAngle += this.xSpeed;
+    this.yAngle += this.ySpeed;
+    this.xAngle %= Math.PI * 2;
+    this.yAngle %= Math.PI * 2;
   }
 }
