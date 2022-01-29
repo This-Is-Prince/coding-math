@@ -1,3 +1,4 @@
+import { MathUtils } from "../Math";
 import { Canvas2DContext, Utils } from "../Utils";
 
 window.addEventListener("load", () => {
@@ -8,19 +9,46 @@ window.addEventListener("load", () => {
   const ctx = Utils.get2DContext(canvas)
     .setCanvasBackgroundColor("white")
     .setCanvasSize(window.innerWidth - 50, window.innerHeight - 50);
+  window.addEventListener("resize", () => {
+    ctx.setCanvasSize(window.innerWidth - 50, window.innerHeight - 50);
+    createArrows();
+  });
 
-  const arrow = new Arrow(window.innerWidth / 2, window.innerHeight / 2, 2);
+  /**
+   * Arrows
+   */
+  let arrows: Arrow[] = [];
+  function createArrows() {
+    const tempArrows: Arrow[] = [];
+    const totalArrows = 5;
+    for (let i = 0; i < totalArrows; i++) {
+      tempArrows.push(
+        new Arrow(
+          MathUtils.randomInt(50, ctx.canvas.width - 50),
+          MathUtils.randomInt(50, ctx.canvas.height - 50),
+          2
+        )
+      );
+    }
+    arrows = tempArrows;
+  }
+  createArrows();
+
   window.addEventListener("mousemove", function (event) {
     const { clientX, clientY } = event;
     let dx = clientX - ctx.canvas.width / 2,
       dy = clientY - ctx.canvas.height / 2;
-    arrow.updateAngle(Math.atan2(dy, dx));
+    arrows.forEach((arrow) => {
+      arrow.updateAngle(Math.atan2(dy, dx));
+    });
   });
 
   render();
   function render() {
     ctx.clearCanvas();
-    arrow.draw(ctx);
+    arrows.forEach((arrow) => {
+      arrow.draw(ctx);
+    });
     window.requestAnimationFrame(render);
   }
 });
