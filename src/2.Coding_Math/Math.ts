@@ -1,3 +1,4 @@
+import { Point2D } from "./Point2D";
 import { Vector2 } from "./Vector";
 
 class MathUtils {
@@ -160,6 +161,49 @@ class MathUtils {
       total += MathUtils.randomRange(min, max);
     }
     return total / iterations;
+  }
+
+  /**
+   * Find point on quadratic bezier curves
+   * @param p0 first point
+   * @param p1 control point
+   * @param p2 second point
+   * @param t norm value
+   * @param pFinal final point on curve
+   */
+  public static quadraticBezier(
+    p0: Point2D,
+    p1: Point2D,
+    p2: Point2D,
+    t: number,
+    pFinal?: Point2D
+  ) {
+    pFinal = pFinal || new Point2D();
+    pFinal.x =
+      Math.pow(1 - t, 2) * p0.x + (1 - t) * 2 * t * p1.x + t * t * p2.x;
+    pFinal.y =
+      Math.pow(1 - t, 2) * p0.y + (1 - t) * 2 * t * p1.y + t * t * p2.y;
+  }
+
+  public static cubicBezier(
+    p0: Point2D,
+    p1: Point2D,
+    p2: Point2D,
+    p3: Point2D,
+    t: number,
+    pFinal?: Point2D
+  ) {
+    pFinal = pFinal || new Point2D();
+    pFinal.x =
+      Math.pow(1 - t, 3) * p0.x +
+      Math.pow(1 - t, 2) * 3 * t * p1.x +
+      (1 - t) * 3 * t * t * p2.x +
+      t * t * t * p3.x;
+    pFinal.y =
+      Math.pow(1 - t, 3) * p0.y +
+      Math.pow(1 - t, 2) * 3 * t * p1.y +
+      (1 - t) * 3 * t * t * p2.y +
+      t * t * t * p3.y;
   }
 }
 
