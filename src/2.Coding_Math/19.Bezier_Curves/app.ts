@@ -1,5 +1,3 @@
-import { MathUtils } from "../Math";
-import { Point2D } from "../Point2D";
 import { Utils } from "../Utils";
 
 window.addEventListener("load", () => {
@@ -80,6 +78,17 @@ window.addEventListener("load", () => {
     p1.draw(ctx);
     p2.draw(ctx);
     p3.draw(ctx);
+
+    ctx.fillStyle = "grey";
+    ctx.beginPath();
+    ctx.moveTo(p0.x, p0.y);
+    ctx.lineTo(p1.x, p1.y);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(p2.x, p2.y);
+    ctx.lineTo(p3.x, p3.y);
+    ctx.stroke();
 
     ctx.fillStyle = "black";
     ctx.beginPath();
